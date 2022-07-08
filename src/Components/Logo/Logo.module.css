@@ -1,0 +1,19 @@
+.tilt {
+    background-color: white;
+    border-radius: 1rem;
+    width: 5rem;
+    height: 5rem;
+    margin-left: 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+.innerTilt {
+    display: flex;
+    align-items: center;
+}
+
+.face {
+    width: 4rem;
+    height: 4rem;
+}

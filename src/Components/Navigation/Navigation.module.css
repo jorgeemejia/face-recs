@@ -1,0 +1,21 @@
+.navbar
+{
+    display: flex;
+    justify-content: flex-end;
+    /* background-color: red; */
+    width: 100%;
+}
+
+
+
+.text
+{
+    color: black;
+    position: relative;
+    right: 5%;
+    text-decoration: underline;
+}
+
+.text:hover {
+    color: orange;
+}
