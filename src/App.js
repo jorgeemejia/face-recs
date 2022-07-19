@@ -5,126 +5,72 @@ import Navigation from "./Components/Navigation/Navigation";
 import Logo from "./Components/Logo/Logo";
 import ImageLinkForm from "./Components/ImageLinkForm/ImageLinkForm";
 import Rank from "./Components/Rank/Rank";
+import React, { Component } from 'react';
+import Clarifai from 'clarifai';
+import FaceRecognition from "./Components/FaceRecognition/FaceRecognition";
 
 
-function App() {
+const app = new Clarifai.App({
+  apiKey: '51e9c88280d54de69e1c763ecb2e77f7'
+});
 
-  constructor() {
+class App extends Component {
+
+  constructor(){
     super();
     this.state = {
       input: '',
+      imageUrl: '',
+      box: {}
     }
   }
 
-
-  onInputChange = (event) => {
-    console.log(event);
+  calculateFaceLocation = (data) => {
+    const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
+    const image = document.getElementById('inputimage')
+    const width = Number(image.width);
+    const height = Number(image.height);
+    console.log(width, height);
+    return {
+      leftCol: clarifaiFace.left_col * width,
+      topRow: clarifaiFace.top_row * height,
+      rightCol: width - (clarifaiFace.right_col * width),
+      bottomRow: height - (clarifaiFace.bottom_row * height)
+    }
   }
 
+  displayFaceBox = (box) => {
+    console.log(box)
+    this.setState({box:box});
+  }
 
-  const particlesInit = async (main) => {
-    console.log(main);
+  onInputChange = (event) => {
+    this.setState({input: event.target.value});
+  }
 
-    // you can initialize the tsParticles instance (main) here, adding custom shapes or presets
-    // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
-    // starting from v2 you can add only the features you need reducing the bundle size
-    await loadFull(main);
-  };
+  onButtonSubmit = () => {
+    this.setState({imageUrl: this.state.input});
+    console.log('click');
+    app.models.predict(
+      Clarifai.FACE_DETECT_MODEL,
+      this.state.input)
+      .then(response => this.displayFaceBox(this.calculateFaceLocation(response)))
+      .catch(err => console.log(err));
+  }
 
-  const particlesLoaded = (container) => {
-    console.log(container);
-  };
-
-
-
-  return (
-    <div className="App">
-      <Particles
-      id="tsparticles"
-      init={particlesInit}
-      loaded={particlesLoaded}
-      options={{
-        background: {
-          color: {
-            value: "#880808",
-          },
-        },
-        fpsLimit: 60,
-        interactivity: {
-          events: {
-            onClick: {
-              enable: false,
-              mode: "push",
-            },
-            onHover: {
-              enable: false,
-              mode: "repulse",
-            },
-            resize: true,
-          },
-          modes: {
-            push: {
-              quantity: 4,
-            },
-            repulse: {
-              distance: 200,
-              duration: 0.4,
-            },
-          },
-        },
-        particles: {
-          color: {
-            value: "#ffffff",
-          },
-          links: {
-            color: "#ffffff",
-            distance: 150,
-            enable: true,
-            opacity: 0.5,
-            width: 1,
-          },
-          collisions: {
-            enable: true,
-          },
-          move: {
-            direction: "none",
-            enable: true,
-            outModes: {
-              default: "bounce",
-            },
-            random: false,
-            speed: 2,
-            straight: false,
-          },
-          number: {
-            density: {
-              enable: true,
-              area: 800,
-            },
-            value: 80,
-          },
-          opacity: {
-            value: 0.5,
-          },
-          shape: {
-            type: "circle",
-          },
-          size: {
-            value: { min: 1, max: 5 },
-          },
-        },
-        detectRetina: true,
-      }}
-    />
-      <Navigation />
-      <Logo />
-      <Rank />
-      <ImageLinkForm/>
-      {/* <Logo />
-      <ImageLinkForm />
-      <FaceRecognition /> */}
-    </div>
-  );
+  render() {
+    return (
+      <div className="App">
+        <p>Hello bello</p>
+        <Navigation/>
+        <Logo />
+        <Rank />
+        <ImageLinkForm onInputChange={this.onInputChange} 
+        onButtonSubmit={this.onButtonSubmit}/>
+        <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl}/>
+      </div>
+    );
+  }
 }
 
 export default App;
