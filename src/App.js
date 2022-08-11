@@ -1,5 +1,4 @@
-import Particles from "react-tsparticles";
-import { loadFull } from "tsparticles";
+
 import './App.css';
 import Navigation from "./Components/Navigation/Navigation";
 import Logo from "./Components/Logo/Logo";
