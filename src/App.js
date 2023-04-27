@@ -10,7 +10,7 @@ import Signin from "./Components/Signin/Signin";
 import Register from "./Components/Register/Register";
 
 
-
+// okay so i'm returning an array of objects, i should just set boxes to that array
 
 
 
@@ -19,6 +19,7 @@ const initialState =
     input: '',
     imageUrl: '',
     box: {},
+    boxes: [],
     route: 'signin',
     isSignedIn: false,
     user: {
@@ -51,32 +52,51 @@ class App extends Component {
     }
 
   calculateFaceLocation = (data) => {
-    const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
+    // const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
     // DO SOMETHING HERE
     // - CONSOLE LOG CLARAIFACE AND TRY TO GET EVERY INSTANCE NOT JUST THE FIRST
     // - TRY CHAT GPT
     // the different faces are the different regions so for example
     // a pic with two faces gets regions[0] and regions [1]
     //https://media-cldnry.s-nbcnews.com/image/upload/t_focal-760x428,f_auto,q_auto:best/MSNBC/Components/Video/201811/fasting.jpg
-    const clarifaiFace2 = data.outputs[0].data.regions[1].region_info.bounding_box;
+    // const clarifaiFace2 = data.outputs[0].data.regions[1].region_info.bounding_box;
+    const clarifaiFaces = [];
     console.log("data.output:", data.outputs)
     const image = document.getElementById('inputimage')
     const width = Number(image.width);
     const height = Number(image.height);
     console.log(width, height);
+    for (const item of data.outputs[0].data.regions) {
+      // console.log("bounding_box", item.region_info.bounding_box);
+      clarifaiFaces.push({leftCol: item.region_info.bounding_box.left_col * width,
+                         topRow: item.region_info.bounding_box.top_row * height,
+                         rightCol: width - (item.region_info.bounding_box.right_col * width),
+                         bottomRow: height - (item.region_info.bounding_box.bottom_row * height)
+                         })
+    }
+    console.log(clarifaiFaces)
     return {
-      leftCol: clarifaiFace.left_col * width,
-      topRow: clarifaiFace.top_row * height,
-      rightCol: width - (clarifaiFace.right_col * width),
-      bottomRow: height - (clarifaiFace.bottom_row * height)
+      // leftCol: clarifaiFace.left_col * width,
+      // topRow: clarifaiFace.top_row * height,
+      // rightCol: width - (clarifaiFace.right_col * width),
+      // bottomRow: height - (clarifaiFace.bottom_row * height)
+      clarifaiFaces
     }
   }
 
 
 
-  displayFaceBox = (box) => {
-    console.log(box)
-    this.setState({box:box});
+  displayFaceBox = (input) => {
+
+    //just add to boxes instead of box
+    // console.log(box)
+    //extract array from const
+    // this.setState({boxes:boxes});
+    // console.log("boxes", boxes)
+    // console.log("boxes.clarafaiFaces", boxes.clarifaiFaces)
+    this.setState({boxes : input.clarifaiFaces});
+    console.log("input.clarafaiFaces", input.clarifaiFaces)
+    console.log("input", input)
   }
 
   onInputChange = (event) => {
@@ -109,6 +129,7 @@ class App extends Component {
         .catch(console.log)
       }
         //im thinking you maybe add a for loop or something to display each face
+        //this 
         this.displayFaceBox(this.calculateFaceLocation(response))
       })
       .catch(err => console.log(err));
@@ -124,7 +145,7 @@ class App extends Component {
   }
 
   render() {
-    const { isSignedIn, imageUrl, route, box} = this.state;
+    const { isSignedIn, imageUrl, route, box, boxes} = this.state;
     return (
       <div className="App">
         <Navigation  isSignedIn={isSignedIn} onRouteChange={this.onRouteChange}/>
@@ -134,7 +155,12 @@ class App extends Component {
             <Rank name={this.state.user.name} entries={this.state.user.entries}/>
             <ImageLinkForm onInputChange={this.onInputChange} 
             onButtonSubmit={this.onButtonSubmit}/>
-            <FaceRecognition box={box} imageUrl={imageUrl}/>
+            {/* This puts the actual box around where box is */}
+            {/* Something like, for each box, display a box */}
+            {boxes.map((box) => (
+              <FaceRecognition  key={box} box={box} imageUrl={imageUrl}/>
+            ))}
+            {/* <FaceRecognition box={box} imageUrl={imageUrl}/> */}
           </div>
           : (
             route === 'signin' 
