@@ -81,7 +81,7 @@ class App extends Component {
 
   //current thoughts, either try just returning clarafai faces and treat that 
   //as the actual output so boxes: boxes
-  //or try some more small debugging
+  //or try some more small debuggin
 
 
 
