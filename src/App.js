@@ -6,6 +6,7 @@ import ImageLinkForm from "./Components/ImageLinkForm/ImageLinkForm";
 import Rank from "./Components/Rank/Rank";
 import React, { Component, useImperativeHandle } from 'react';
 import FaceRecognition from "./Components/FaceRecognition/FaceRecognition";
+import MultiFaceRecognition from './Components/MultiFaceRecognition/MultiFaceRecognition';
 import Signin from "./Components/Signin/Signin";
 import Register from "./Components/Register/Register";
 
@@ -53,13 +54,7 @@ class App extends Component {
 
   calculateFaceLocation = (data) => {
     // const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
-    // DO SOMETHING HERE
-    // - CONSOLE LOG CLARAIFACE AND TRY TO GET EVERY INSTANCE NOT JUST THE FIRST
-    // - TRY CHAT GPT
-    // the different faces are the different regions so for example
-    // a pic with two faces gets regions[0] and regions [1]
     //https://media-cldnry.s-nbcnews.com/image/upload/t_focal-760x428,f_auto,q_auto:best/MSNBC/Components/Video/201811/fasting.jpg
-    // const clarifaiFace2 = data.outputs[0].data.regions[1].region_info.bounding_box;
     const clarifaiFaces = [];
     console.log("data.output:", data.outputs)
     const image = document.getElementById('inputimage')
@@ -67,14 +62,14 @@ class App extends Component {
     const height = Number(image.height);
     console.log(width, height);
     for (const item of data.outputs[0].data.regions) {
-      // console.log("bounding_box", item.region_info.bounding_box);
       clarifaiFaces.push({leftCol: item.region_info.bounding_box.left_col * width,
                          topRow: item.region_info.bounding_box.top_row * height,
                          rightCol: width - (item.region_info.bounding_box.right_col * width),
                          bottomRow: height - (item.region_info.bounding_box.bottom_row * height)
                          })
     }
-    console.log(clarifaiFaces)
+    console.log("clarafaiFaces in calculatefacelocation", clarifaiFaces)
+    console.log("clarafaices[0].topRow", clarifaiFaces[0].topRow)
     return {
       // leftCol: clarifaiFace.left_col * width,
       // topRow: clarifaiFace.top_row * height,
@@ -84,19 +79,21 @@ class App extends Component {
     }
   }
 
+  //current thoughts, either try just returning clarafai faces and treat that 
+  //as the actual output so boxes: boxes
+  //or try some more small debugging
 
 
-  displayFaceBox = (input) => {
 
-    //just add to boxes instead of box
-    // console.log(box)
-    //extract array from const
-    // this.setState({boxes:boxes});
-    // console.log("boxes", boxes)
-    // console.log("boxes.clarafaiFaces", boxes.clarifaiFaces)
-    this.setState({boxes : input.clarifaiFaces});
-    console.log("input.clarafaiFaces", input.clarifaiFaces)
-    console.log("input", input)
+  displayFaceBox = (box) => {
+
+    console.log("box", box)
+    console.log("box.clarafaiFaces", box.clarifaiFaces)
+    console.log("box.clarafai[0]", box.clarifaiFaces[0])
+    console.log("toprow", box.clarifaiFaces[0].topRow)
+    this.setState({box:box.clarifaiFaces[1]});
+    this.setState({boxes:box.clarifaiFaces})
+
   }
 
   onInputChange = (event) => {
@@ -157,10 +154,11 @@ class App extends Component {
             onButtonSubmit={this.onButtonSubmit}/>
             {/* This puts the actual box around where box is */}
             {/* Something like, for each box, display a box */}
-            {boxes.map((box) => (
-              <FaceRecognition  key={box} box={box} imageUrl={imageUrl}/>
-            ))}
-            {/* <FaceRecognition box={box} imageUrl={imageUrl}/> */}
+            {/* {boxes.map((boxy, index) => (
+        <FaceRecognition key={index} imageUrl={imageUrl} box={boxy} />
+      ))} */}
+            <FaceRecognition box={box} imageUrl={imageUrl}/>
+            <MultiFaceRecognition boxes={boxes} imageUrl={imageUrl}/>
           </div>
           : (
             route === 'signin' 
