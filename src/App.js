@@ -157,7 +157,7 @@ class App extends Component {
             {/* {boxes.map((boxy, index) => (
         <FaceRecognition key={index} imageUrl={imageUrl} box={boxy} />
       ))} */}
-            <FaceRecognition box={box} imageUrl={imageUrl}/>
+            {/* <FaceRecognition box={box} imageUrl={imageUrl}/> */}
             <MultiFaceRecognition boxes={boxes} imageUrl={imageUrl}/>
           </div>
           : (
