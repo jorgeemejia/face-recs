@@ -8,10 +8,13 @@ face-recs is web app that allows users to upload photos and get instant analysis
 
 ### How to use face-recs
 
-#### 1) In order to use face-recs you first must register an account. 
-All face-recs requires is your name, email, and password. face-recs does not require email verification and your email will not be distributed to third parties. face-recs will also never subscribe users to our email list (because we don't have one xD).
+#### 1) Register
 
-#### 2) Upon registering you will be welcomed to the home page where you will have access to face-recs' facial recognition tool. Here you can simply post links in 
+In order to use face-recs you first must register an account. Click on the 'Register' tab and enter your name, email and password. face-recs does not require email verification and your email will not be distributed to third parties. face-recs will also never subscribe users to our email list (because we don't have one xD).
+
+#### 2) Start using face-recs!
+
+Upon registering you will be welcomed to the home page where you will have access to face-recs' facial recognition tool. Here you can simply post links in form below and click the 'Detect' button to detect facial patterns within the image. 
 
 ### Project Stack
 
