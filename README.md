@@ -25,6 +25,16 @@ When you are done using face-recs click on the 'Sign Out' tab to sign you out. I
 - React.js (Frontend)
 - Express.js (Server)
 - Postgresql (Backend)
+- Heroku (Hosting)
+- Clarafai API (Computer Vision Technology)
+
+### Coming Soon
+
+- 'Forgot Password' feature
+
+
+
+
 
 
 
