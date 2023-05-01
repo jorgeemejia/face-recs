@@ -16,6 +16,10 @@ In order to use face-recs you first must register an account. Click on the 'Regi
 
 Upon registering you will be welcomed to the home page where you will have access to face-recs' facial recognition tool. Here you can simply post links in form below and click the 'Detect' button to detect facial patterns within the image. 
 
+#### 3) Sign Out
+
+When you are done using face-recs click on the 'Sign Out' tab to sign you out. If you'd like to use face-recs in the future, simply enter your email and password on the 'Sign In' form.
+
 ### Project Stack
 
 - React.js (Frontend)
