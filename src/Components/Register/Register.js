@@ -1,5 +1,5 @@
 import React from 'react';
-
+import classes from './Register.module.css'
 
 class Register extends React.Component {
     constructor(props) {
@@ -26,7 +26,6 @@ class Register extends React.Component {
     }
 
     onSubmitSignIn = () => {
-        console.log(this.state);
         fetch('https://thawing-chamber-69828.herokuapp.com/register', {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
@@ -42,57 +41,66 @@ class Register extends React.Component {
                 this.props.loadUser(user);
                 this.props.onRouteChange('home');
             }
-        })
-        // this.props.onRouteChange('home');    
+        })   
 
     }
 
 
     render(){
         return(
-            <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
-                <main className="pa4 black-80">
-                    <div className="measure">
-                        <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
-                        <legend className="f1 fw6 ph0 mh0">Register</legend>
-                        <div className="mt3">
-                            <label className="db fw6 lh-copy f6" htmlFor="name">Name</label>
-                            <input 
-                            onChange = {this.onNameChange}
-                            className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" 
-                            type="text" 
-                            name="name"  
-                            id="name"/>
-                        </div>
-                        <div className="mt3">
-                            <label className="db fw6 lh-copy f6" htmlFor="email-address">Email</label>
-                            <input 
-                            onChange={this.onEmailChange}
-                            className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" 
-                            type="email" 
-                            name="email-address"  
-                            id="email-address"/>
-                        </div>
-                        <div className="mv3">
-                            <label className="db fw6 lh-copy f6" htmlFor="password">Password</label>
-                            <input 
-                            onChange={this.onPasswordChange}
-                            className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" 
-                            type="password" 
-                            name="password"  
-                            id="password"/>
-                        </div>
-                        </fieldset>
-                        <div className="">
-                            <input 
-                            onClick={this.onSubmitSignIn}
-                            className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" 
-                            type="submit" 
-                            value="Register"/>
-                        </div>
-                    </div>
-                </main>
-            </article>
+<div className={classes.form_container} style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+    <div className={classes.form_background}>
+        <fieldset id="sign_up" className={classes.form_fieldset} style={{border: 'none', margin: '0'}}>
+            <div className={classes.legend_container}>
+                <legend className={classes.legend} style={{fontSize: '2rem', fontWeight: 'bold'}}>Register</legend>
+            </div>
+            <div className={classes.form_input_container} style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                <label className={classes.form_label} htmlFor="name" style={{margin: '1rem'}}>Name</label>
+                <input 
+                    onChange = {this.onNameChange}
+                    className={classes.form_input} 
+                    type="text" 
+                    name="name"  
+                    id="name"
+                    style={{padding: '0.5rem', borderRadius: '5px', border: '1px solid gray', marginBottom: '1rem'}}
+                />
+            </div>
+            <div className={classes.form_input_container} style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                <label className={classes.form_label} htmlFor="email-address" style={{margin: '1rem'}}>Email</label>
+                <input 
+                    onChange={this.onEmailChange}
+                    className={classes.form_input} 
+                    type="email" 
+                    name="email-address"  
+                    id="email-address"
+                    style={{padding: '0.5rem', borderRadius: '5px', border: '1px solid gray', marginBottom: '1rem'}}
+                />
+            </div>
+            <div className={classes.form_input_container} style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                <label className={classes.form_label} htmlFor="password" style={{margin: '1rem'}}>Password</label>
+                <input 
+                    onChange={this.onPasswordChange}
+                    className={classes.form_input} 
+                    type="password" 
+                    name="password"  
+                    id="password"
+                    style={{padding: '0.5rem', borderRadius: '5px', border: '1px solid gray', marginBottom: '1rem'}}
+                />
+            </div>
+        </fieldset>
+        <div className={classes.form_button_container} style={{marginTop: '1rem'}}>
+            <input 
+            onClick={this.onSubmitSignIn}
+            className={classes.form_button} 
+            type="submit" 
+            value="Register"
+            style={{padding: '0.5rem 1rem', borderRadius: '5px', backgroundColor: '#007bff', color: 'white', border: 'none', cursor: 'pointer'}}
+            />
+        </div>
+    </div>
+</div>
+
+
         );
     }
 }

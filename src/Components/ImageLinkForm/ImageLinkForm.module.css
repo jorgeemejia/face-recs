@@ -12,8 +12,7 @@
 }
 
 .formcontainer{
-    background: radial-gradient(circle at 0% 50%, rgba(96, 16, 48, 0) 9px, #613 10px, rgba(96, 16, 48, 0) 11px) 0px 10px,
-    radial-gradient(at 100% 100%,rgba(96, 16, 48, 0) 9px, #613 10px, rgba(96, 16, 48, 0) 11px),white;
+    background-color: #0b2453;
     background-size: 20px 20px;
     width: 60%;
     display: flex;
@@ -28,8 +27,7 @@
 }
 
 .btn {
-    /* font-size: 2vw; */
-    width: 15%;
+    margin-left: 1rem;
     background-color: rgb(232, 232, 45);
     font-family: sans-serif;
     border: none;
@@ -40,5 +38,4 @@
 
 .btn:hover{
     transform: scale(1.50);
-    
 }

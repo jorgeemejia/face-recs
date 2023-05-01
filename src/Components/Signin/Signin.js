@@ -1,6 +1,6 @@
 
 import React from "react";
-import classNames from "./Signin.module.css";
+import classes from "./Signin.module.css";
 
 
 
@@ -24,7 +24,6 @@ class Signin extends React.Component{
     }
 
     onSubmitSignIn = () => {
-        console.log(this.state);
         fetch('https://thawing-chamber-69828.herokuapp.com/signin', {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
@@ -39,8 +38,7 @@ class Signin extends React.Component{
                 this.props.loadUser(user);
                 this.props.onRouteChange('home');
             }
-        })
-        // this.props.onRouteChange('home');    
+        })   
 
     }
 
@@ -48,43 +46,50 @@ class Signin extends React.Component{
     render(){
         const { onRouteChange } = this.props;
         return(
-            <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
-                <main className="pa4 black-80">
-                    <div className="measure">
-                        <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
-                        <legend className="f1 fw6 ph0 mh0">Sign In</legend>
-                        <div className="mt3">
-                            <label className="db fw6 lh-copy f6" htmlFor="email-address">Email</label>
-                            <input 
-                            onChange={this.onEmailChange}
-                            className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" 
-                            type="email" 
-                            name="email-address"  
-                            id="email-address"/>
-                        </div>
-                        <div className="mv3">
-                            <label className="db fw6 lh-copy f6" htmlFor="password">Password</label>
-                            <input 
-                            onChange={this.onPasswordChange}
-                            className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100" 
-                            type="password" 
-                            name="password"  
-                            id="password"/>
-                        </div>
-                        </fieldset>
-                        <div className="">
-                            <input 
-                            onClick={this.onSubmitSignIn}
-                            className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" 
-                            type="submit" 
-                            value="Sign in"/>
-                        </div>
-                        <div className="lh-copy mt3">
-                            <p onClick={() => onRouteChange('register')}href="#0" className="f6 link dim black db pointer">Register</p>
-                        </div>
-                    </div>
-                </main>
-            </article>
+            <div className="" style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <div className={classes.form_background}>
+            <fieldset id="sign_up" className={classes.fieldset} style={{border: 'none', margin: '0'}}>
+              <div className={classes.legend_container}>
+                <legend className="" style={{fontSize: '2rem', fontWeight: 'bold'}}>Sign In</legend>
+              </div>
+              <div className="" style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                <label className="" htmlFor="email-address" style={{margin: '1rem'}}>Email</label>
+                <input 
+                  onChange={this.onEmailChange}
+                  className="" 
+                  type="email" 
+                  name="email-address"  
+                  id="email-address"
+                  style={{padding: '0.5rem', borderRadius: '5px', border: '1px solid gray', marginBottom: '1rem'}}
+                />
+              </div>
+              <div className="" style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                <label className="" htmlFor="password" style={{margin: '1rem'}}>Password</label>
+                <input 
+                  onChange={this.onPasswordChange}
+                  className="" 
+                  type="password" 
+                  name="password"  
+                  id="password"
+                  style={{padding: '0.5rem', borderRadius: '5px', border: '1px solid gray', marginBottom: '1rem'}}
+                />
+              </div>
+            </fieldset>
+            <div className="" style={{marginTop: '1rem'}}>
+              <input 
+                onClick={this.onSubmitSignIn}
+                className="" 
+                type="submit" 
+                value="Sign in"
+                style={{padding: '0.5rem 1rem', borderRadius: '5px', backgroundColor: '#007bff', color: 'white', border: 'none', cursor: 'pointer'}}
+              />
+            </div>
+            <div className="" style={{marginTop: '1rem'}}>
+              <p onClick={() => onRouteChange('register')}href="#0" className="" style={{color: 'blue', textDecoration: 'underline', cursor: 'pointer'}}>Register</p>
+            </div>
+            </div>
+          </div>
+          
         );
     }
 }

@@ -1,20 +1,19 @@
 
 import './App.css';
 import Navigation from "./Components/Navigation/Navigation";
-import Logo from "./Components/Logo/Logo";
 import ImageLinkForm from "./Components/ImageLinkForm/ImageLinkForm";
 import Rank from "./Components/Rank/Rank";
-import React, { Component, useImperativeHandle } from 'react';
-import FaceRecognition from "./Components/FaceRecognition/FaceRecognition";
+import React, { Component } from 'react';
 import MultiFaceRecognition from './Components/MultiFaceRecognition/MultiFaceRecognition';
 import Signin from "./Components/Signin/Signin";
 import Register from "./Components/Register/Register";
 
 
-// okay so i'm returning an array of objects, i should just set boxes to that array
-
-
-
+//////////////////////////////////////////////////////////////////////////
+// Creating the initial state of the application
+// Most values are empty as the user and their info is not initially known 
+// The first page upon arrival is the signin page
+//////////////////////////////////////////////////////////////////////////
 const initialState = 
   {
     input: '',
@@ -33,15 +32,26 @@ const initialState =
   }
 
 
-
+//////////////////////////////////////////////////////////////////////////
+// Creating the initial state of the application
+// Most values are empty as the user and their info is not initially known 
+// The first page upon arrival is the signin page
+//////////////////////////////////////////////////////////////////////////
 class App extends Component {
 
+
+  //////////////////////////////////////////////////////////////////////////
+  // Assigns the inital state to the state of the component
+  //////////////////////////////////////////////////////////////////////////
   constructor(){
     super();
     this.state = initialState;
   }
   
-
+  //////////////////////////////////////////////////////////////////////////
+  // This function helps assign the user's details to the state variables of
+  // the component
+  //////////////////////////////////////////////////////////////////////////
   loadUser = (data) => {
     this.setState({user: {
       id: data.id,
@@ -52,15 +62,15 @@ class App extends Component {
       }})
     }
 
+  //////////////////////////////////////////////////////////////////////////
+  // This function helps calculate the exact location of faces in the 
+  // submitted image
+  //////////////////////////////////////////////////////////////////////////
   calculateFaceLocation = (data) => {
-    // const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
-    //https://media-cldnry.s-nbcnews.com/image/upload/t_focal-760x428,f_auto,q_auto:best/MSNBC/Components/Video/201811/fasting.jpg
     const clarifaiFaces = [];
-    console.log("data.output:", data.outputs)
     const image = document.getElementById('inputimage')
     const width = Number(image.width);
     const height = Number(image.height);
-    console.log(width, height);
     for (const item of data.outputs[0].data.regions) {
       clarifaiFaces.push({leftCol: item.region_info.bounding_box.left_col * width,
                          topRow: item.region_info.bounding_box.top_row * height,
@@ -68,38 +78,34 @@ class App extends Component {
                          bottomRow: height - (item.region_info.bounding_box.bottom_row * height)
                          })
     }
-    console.log("clarafaiFaces in calculatefacelocation", clarifaiFaces)
-    console.log("clarafaices[0].topRow", clarifaiFaces[0].topRow)
     return {
-      // leftCol: clarifaiFace.left_col * width,
-      // topRow: clarifaiFace.top_row * height,
-      // rightCol: width - (clarifaiFace.right_col * width),
-      // bottomRow: height - (clarifaiFace.bottom_row * height)
       clarifaiFaces
     }
   }
 
-  //current thoughts, either try just returning clarafai faces and treat that 
-  //as the actual output so boxes: boxes
-  //or try some more small debuggin
-
-
-
+  //////////////////////////////////////////////////////////////////////////
+  // This function helps display the borders around each face
+  // More specifically, the coordinates of each face are saved to a state
+  //////////////////////////////////////////////////////////////////////////
   displayFaceBox = (box) => {
 
-    console.log("box", box)
-    console.log("box.clarafaiFaces", box.clarifaiFaces)
-    console.log("box.clarafai[0]", box.clarifaiFaces[0])
-    console.log("toprow", box.clarifaiFaces[0].topRow)
     this.setState({box:box.clarifaiFaces[1]});
     this.setState({boxes:box.clarifaiFaces})
 
   }
 
+  //////////////////////////////////////////////////////////////////////////
+  // This function helps display the changes within the sections of the forms
+  //////////////////////////////////////////////////////////////////////////
   onInputChange = (event) => {
     this.setState({input: event.target.value});
   }
 
+  //////////////////////////////////////////////////////////////////////////
+  // This function (1) sends the user submitted image to the face-recs api
+  // (2) With the help of Clarafai's api, the face-recs api responds with 
+  // the coordinates of the faces found within the user submitted image
+  //////////////////////////////////////////////////////////////////////////
   onButtonSubmit = () => {
     this.setState({imageUrl: this.state.input});
       fetch('https://thawing-chamber-69828.herokuapp.com/imageurl', {
@@ -125,13 +131,17 @@ class App extends Component {
         })
         .catch(console.log)
       }
-        //im thinking you maybe add a for loop or something to display each face
-        //this 
         this.displayFaceBox(this.calculateFaceLocation(response))
       })
       .catch(err => console.log(err));
   }
 
+  //////////////////////////////////////////////////////////////////////////
+  // This function helps controlling the routes of the application
+  // It is important to note that there aren't actually different routes
+  // This is essentially a single page app with different components rendered
+  // at different times
+  //////////////////////////////////////////////////////////////////////////
   onRouteChange = (route) => {
     if (route === 'signout'){
       this.setState(initialState)
@@ -141,30 +151,36 @@ class App extends Component {
     this.setState({route: route});
   }
 
+  onClearClick = (event) => {
+    this.setState({input: "", imageUrl: ""});
+    document.getElementById("input-field").value = "";
+    // console.log('clear was clicked')
+
+  };
+
+  //////////////////////////////////////////////////////////////////////////
+  // Renders the actual site
+  //////////////////////////////////////////////////////////////////////////
   render() {
-    const { isSignedIn, imageUrl, route, box, boxes} = this.state;
+    const { isSignedIn, imageUrl, route, boxes} = this.state;
     return (
       <div className="App">
         <Navigation  isSignedIn={isSignedIn} onRouteChange={this.onRouteChange}/>
         {route === "home"
-          ? <div> 
-            <Logo />
-            <Rank name={this.state.user.name} entries={this.state.user.entries}/>
-            <ImageLinkForm onInputChange={this.onInputChange} 
-            onButtonSubmit={this.onButtonSubmit}/>
-            {/* This puts the actual box around where box is */}
-            {/* Something like, for each box, display a box */}
-            {/* {boxes.map((boxy, index) => (
-        <FaceRecognition key={index} imageUrl={imageUrl} box={boxy} />
-      ))} */}
-            {/* <FaceRecognition box={box} imageUrl={imageUrl}/> */}
-            <MultiFaceRecognition boxes={boxes} imageUrl={imageUrl}/>
-          </div>
+          ? (
+            <div> 
+              <Rank name={this.state.user.name} entries={this.state.user.entries}/>
+              <ImageLinkForm onInputChange={this.onInputChange} 
+                             onButtonSubmit={this.onButtonSubmit}
+                             onClearClick={this.onClearClick}/>
+              <MultiFaceRecognition boxes={boxes} imageUrl={imageUrl}/>
+            </div>
+            )
           : (
             route === 'signin' 
             ? <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
             : <Register  loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
-          )
+            )
         }
       </div>
     );
